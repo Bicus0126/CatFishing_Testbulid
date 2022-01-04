@@ -9,6 +9,7 @@ public class GameProcess : MonoBehaviour
     ObjectPoolInstantiator BlockSpawner;
     public CatEnter CatEnter;
     public Health HP;
+    public PhaseCount PHCount;
     public AudioSource BGM;
     Vector3 CatSpawnPoint = new Vector3(-15f, 8f, 0f);
     public ClickAndDragWithDynamics MouseDrag;
@@ -20,9 +21,9 @@ public class GameProcess : MonoBehaviour
     public GameObject EndScreen;
     EndingScreen endingScreen;
     TimeCounter timeCounter;
-    public List<int> BlockPhase = new List<int>{10, 22, 35};
-    public List<int> SavePhase = new List<int>{4, 3, 2};
-    public List<float> FishPhase = new List<float>{6f, 10f, 15f};
+    public List<int> BlockPhase = new List<int>{10, 9, 8};
+    public List<int> SavePhase = new List<int>{3, 2, 1};
+    public List<float> FishPhase = new List<float>{6f, 9f, 12f};
     public List<float> TimePhase = new List<float>{30, 25, 20};
     int MaxBlock = 0;
     [ReadOnlyInspecter] public int Phase = 0;
@@ -32,6 +33,7 @@ public class GameProcess : MonoBehaviour
     [ReadOnlyInspecter] public float EndingTimer = 0f;
     public const float waitTime = 3f;
     bool BlockTimerActive = false, GameOver = false;
+    Coroutine currentProcess;
     
     void Start()
     {
@@ -40,13 +42,15 @@ public class GameProcess : MonoBehaviour
         Timer.SetActive(false);
         BlockCount = BlockCounter.GetComponent<Text>();
         BlockSpawner = BlockSpawnerObject.GetComponent<ObjectPoolInstantiator>();
+        PHCount.numOfPhases = BlockPhase.Count;
         MaxBlock = 0;
-        StartCoroutine(Gameprocess(Phase = 0));
+        currentProcess = StartCoroutine(Gameprocess(Phase = 0));
     }
 
     WaitForSeconds HoldBuffer = new WaitForSeconds(1f);
     IEnumerator Gameprocess(int currentPhase)
     {
+        PHCount.Phase = currentPhase;
         yield return HoldBuffer;
         MaxBlock += BlockPhase[Phase];
         FishEaten = false;
@@ -87,7 +91,7 @@ public class GameProcess : MonoBehaviour
         if(Phase < BlockPhase.Count)
         {
             MouseDrag.enabled = true;
-            StartCoroutine(Gameprocess(++Phase));
+            currentProcess = StartCoroutine(Gameprocess(++Phase));
         }
         else
         {
@@ -117,6 +121,7 @@ public class GameProcess : MonoBehaviour
         if (HP.health <= 0 && !GameOver)
         {
             GameOver = true;
+            StopCoroutine(currentProcess);
             BGM.Stop();
             EndScreen.SetActive(true);
             endingScreen.EndingAnimation(false); //play lose ending
