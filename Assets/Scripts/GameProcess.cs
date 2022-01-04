@@ -9,13 +9,16 @@ public class GameProcess : MonoBehaviour
     ObjectPoolInstantiator BlockSpawner;
     public CatEnter CatEnter;
     public Health HP;
-    public Vector3 CatSpawnPoint = new Vector3(-15f, 8f, 0f);
+    public AudioSource BGM;
+    Vector3 CatSpawnPoint = new Vector3(-15f, 8f, 0f);
     public ClickAndDragWithDynamics MouseDrag;
     public GameObject BlockCounter;
     public GameObject FishPrefab;
     public GameObject SmokePrefab;
     Text BlockCount;
     public GameObject Timer;
+    public GameObject EndScreen;
+    EndingScreen endingScreen;
     TimeCounter timeCounter;
     public List<int> BlockPhase = new List<int>{10, 22, 35};
     public List<int> SavePhase = new List<int>{4, 3, 2};
@@ -28,10 +31,11 @@ public class GameProcess : MonoBehaviour
     [HideInInspector] public bool FishEaten = false;
     [ReadOnlyInspecter] public float EndingTimer = 0f;
     public const float waitTime = 3f;
-    bool BlockTimerActive = false;
+    bool BlockTimerActive = false, GameOver = false;
     
     void Start()
     {
+        endingScreen = EndScreen.GetComponent<EndingScreen>();
         timeCounter = Timer.GetComponent<TimeCounter>();
         Timer.SetActive(false);
         BlockCount = BlockCounter.GetComponent<Text>();
@@ -40,8 +44,10 @@ public class GameProcess : MonoBehaviour
         StartCoroutine(Gameprocess(Phase = 0));
     }
 
+    WaitForSeconds HoldBuffer = new WaitForSeconds(1f);
     IEnumerator Gameprocess(int currentPhase)
     {
+        yield return HoldBuffer;
         MaxBlock += BlockPhase[Phase];
         FishEaten = false;
         //生成魚
@@ -78,9 +84,24 @@ public class GameProcess : MonoBehaviour
             }
             Timer.SetActive(false);
         }
-        MouseDrag.enabled = true;
-        StartCoroutine(Gameprocess(++Phase));
+        if(Phase < BlockPhase.Count)
+        {
+            MouseDrag.enabled = true;
+            StartCoroutine(Gameprocess(++Phase));
+        }
+        else
+        {
+            BGM.Stop();
+            EndScreen.SetActive(true);
+            endingScreen.EndingAnimation(true); //play win ending
+        }
         yield break;
+    }
+
+    public void CatDied()
+    {
+        HP.hurt(1);
+        CatEnter.CatAnimation();
     }
 
     void Update()
@@ -92,5 +113,13 @@ public class GameProcess : MonoBehaviour
         }
         else
             EndingTimer = 0f;
+        
+        if (HP.health <= 0 && !GameOver)
+        {
+            GameOver = true;
+            BGM.Stop();
+            EndScreen.SetActive(true);
+            endingScreen.EndingAnimation(false); //play lose ending
+        }
     }
 }

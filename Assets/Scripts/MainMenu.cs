@@ -9,7 +9,10 @@ public class MainMenu : MonoBehaviour
     Image FadeBlack;
     public float FadeOutTime = 1f;
 
+    public GameObject BGPanel;
+    AudioSource BGM;
     public GameObject CatObject;
+    public AudioSource CatSound;
     Transform CatTransform;
     Animator CatAnimator;
     Rigidbody2D CatRigidbody;
@@ -24,7 +27,9 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame ()
     {
+        BGM = BGPanel.GetComponent<AudioSource>();
         Blackscreen.SetActive(true);
+        CatSound.Play();
         StartCoroutine(StartAnimation());
     }
 
@@ -41,7 +46,7 @@ public class MainMenu : MonoBehaviour
 
         Color FadeColor = FadeBlack.color;
         WaitForSeconds WaitToFade = new WaitForSeconds(FadeOutTime/100f);
-        for (float t = 0; t <= 1; t += 0.01f)
+        for (float t = 0; t <= 1 || BGM.volume > 0; t += 0.01f, BGM.volume -= 0.005f)
         {
             Debug.Log("t = " + t);
             FadeBlack.color = new Color(FadeColor.r, FadeColor.g, FadeColor.b, t);

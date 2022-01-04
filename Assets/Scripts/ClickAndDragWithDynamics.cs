@@ -15,8 +15,8 @@ public class ClickAndDragWithDynamics : MonoBehaviour
     [ReadOnlyInspecter] public float offset_A = 0;
     [ReadOnlyInspecter] public float Rad = 0;
 
-    public Collider2D targetCollider;
-    public GameObject targetObject;
+    [ReadOnlyInspecter] public Collider2D targetCollider;
+    [ReadOnlyInspecter] public GameObject targetObject;
     private Rigidbody2D selectedObject;
     private LineRenderer lineRend;
     private HingeJoint2D _hingeJoint;
