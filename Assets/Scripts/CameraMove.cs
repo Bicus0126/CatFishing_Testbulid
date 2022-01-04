@@ -6,10 +6,11 @@ public class CameraMove : MonoBehaviour
 {
     //moving camera in y axis by LMB, reset camera by middle mouse button
     //floor hard limited at y=0
-    public float Fzone = 4f;
+    public GameObject highpointFinder;
+    public float Fzone = 2f;
     public float followInTime = 3f;
-    public float velocity;
-    public float highpoint;
+    [ReadOnlyInspecter] public float velocity;
+    [ReadOnlyInspecter] public float highpoint;
     private float Diff_y;
     private Vector3 originPos;
     private Vector3 ResetCamera;
@@ -23,15 +24,15 @@ public class CameraMove : MonoBehaviour
     }
 
     private Vector3 camPos;
-    public Vector3 newCamPos;
     private Vector3 mousePos;
-    public bool followmode = true;
-    public bool inZone;
+    [ReadOnlyInspecter] public Vector3 newCamPos;
+    [ReadOnlyInspecter] public bool followmode = true;
+    [ReadOnlyInspecter] public bool inZone;
     private void LateUpdate()
     {
         camPos = transform.position;
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        highpoint = GameObject.Find("highpointFinder").transform.position.y;
+        highpoint = highpointFinder.transform.position.y +2f;   //offsetted
         inZone = (camPos.y + Fzone > highpoint && highpoint > camPos.y);
         followmode = inZone && !drag ? true : followmode;
 

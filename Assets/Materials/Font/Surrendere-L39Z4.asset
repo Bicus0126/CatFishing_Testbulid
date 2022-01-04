@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Surrendere-L39Z4
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 766594302
   material: {fileID: 2011097800436095574}
-  materialHashCode: 0
+  materialHashCode: 1781675934
   m_Version: 1.1.0
   m_SourceFontFileGUID: e9327dfb3d248c948a7350e8e27e693c
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: e9327dfb3d248c948a7350e8e27e693c, type: 3}

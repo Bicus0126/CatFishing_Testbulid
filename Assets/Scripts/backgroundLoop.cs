@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class backgroundLoop : MonoBehaviour{
     public GameObject[] levels;
-    private Camera mainCamera;
+    public Camera mainCamera;
     private Vector2 screenBounds;
     public float choke;
     public float scrollSpeed;
 
     void Start(){
-        mainCamera = gameObject.GetComponent<Camera>();
+        //mainCamera = gameObject.GetComponent<Camera>();
         screenBounds = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.transform.position.z));
         foreach(GameObject obj in levels){
             loadChildObjects(obj);

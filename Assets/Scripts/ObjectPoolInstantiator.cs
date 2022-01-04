@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,24 +15,37 @@ public class ObjectPoolInstantiator : MonoBehaviour
         public ObjectPool pool;
     }
 
-    public float SpawnInterval = 5f;
     public List<objectPool> poolList;
+    public Transform objParent;
+    public bool SpawnerProcess = true;
+    private bool SpawnerPreStatus = false;
+    public float SpawnInterval = 5f;
+    public bool randomizeDrop = true;
+    public float DropRangeLeft = -5f;
+    public float DropRangeRight = 5f;
     private GameObject poolElement;
-    private Transform objParent;
     private CircleCollider2D spawnCheck;
     private Vector3 spawnPoint;
     string objTag;
     bool spawnClear = true;
 
+    public float T_buf;
+    public bool delay_stop;
+
+    public bool manualSpawner = false;
+    [ReadOnlyInspecter] public int BCounter = 0; 
+
     void Start()
     {
-        objParent = GameObject.Find("Blocks").transform;
+        //objParent = GameObject.Find("Blocks").transform;
         spawnCheck = gameObject.GetComponent<CircleCollider2D>();
         foreach (objectPool Pool in poolList)
         {
             Pool.pool = new ObjectPool(Pool.prefab, Pool.initsize, objParent);
         }
-        StartCoroutine(spawnBlock(SpawnInterval));
+
+        T_buf = 0.0f;
+        delay_stop = false;
     }
 
     void OnTriggerStay2D()
@@ -45,17 +59,27 @@ public class ObjectPoolInstantiator : MonoBehaviour
 
     void Update()
     {
+        if (!SpawnerProcess && SpawnerPreStatus)
+            SpawnerPreStatus = false;
+        else if (SpawnerProcess != SpawnerPreStatus)
+        {
+            SpawnerPreStatus = SpawnerProcess;
+            StartCoroutine(spawnBlock(SpawnInterval));
+        }
+
         Vector2 Offset = spawnCheck.offset;
         Offset.y += spawnClear ? (Offset.y > 0f ? -0.1f : 0f) : 0.1f;
         spawnCheck.offset = Offset;
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        //manual spawning
+        if (manualSpawner && Input.GetKeyDown(KeyCode.Space))
         {
             int rgn = UnityEngine.Random.Range(0, poolList.Count);
             objTag = poolList[rgn].tag;
             poolElement = poolList.Find(x => x.tag == objTag).pool.get();
             poolElement.transform.position = transform.position;
             poolElement.transform.rotation = Quaternion.identity;
-            poolElement.tag = "Ground";
+            poolElement.layer = LayerMask.NameToLayer("Props");
             poolElement.SetActive(true);
             poolElement.GetComponent<onBlockSpawn>().enabled = true;
 
@@ -63,25 +87,35 @@ public class ObjectPoolInstantiator : MonoBehaviour
             pooledObj.OnObjectSpawn();
         }
     }
+
     IEnumerator spawnBlock(float spawnInterval)
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(SpawnInterval);
-        //WaitUntil waitUntil = new WaitUntil(() => spawnClear);
-        while (true)
+        while (SpawnerProcess)
         {
+            Debug.Log("Spawner Running...");
             int rgn = UnityEngine.Random.Range(0, poolList.Count);
             objTag = poolList[rgn].tag;
             poolElement = poolList.Find(x => x.tag == objTag).pool.get();
 
+            if (randomizeDrop)
+            {
+                float rgnf = UnityEngine.Random.Range(DropRangeLeft, DropRangeRight);
+                Vector2 Offset = spawnCheck.offset;
+                Offset.x = rgnf;
+                spawnCheck.offset = Offset;
+            }
             yield return new WaitUntil(() => spawnClear);
             poolElement.transform.position = transform.position + new Vector3(spawnCheck.offset.x, spawnCheck.offset.y, 0f);
-            poolElement.tag = "Ground";
             poolElement.transform.rotation = Quaternion.identity;
+            poolElement.layer = LayerMask.NameToLayer("Props");
             poolElement.SetActive(true);
             poolElement.GetComponent<onBlockSpawn>().enabled = true;
 
             IPooledObject pooledObj = poolElement.GetComponent<IPooledObject>();
             pooledObj.OnObjectSpawn();
+
+            BCounter++;
 
             yield return waitForSeconds;
         }
