@@ -86,7 +86,6 @@ GameObject:
   - component: {fileID: 7933422962205707878}
   - component: {fileID: 7933422962205707903}
   - component: {fileID: 7933422962205707873}
-  - component: {fileID: 7933422962205707872}
   m_Layer: 6
   m_Name: CatPlayer
   m_TagString: Player
@@ -193,17 +192,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa08c6f658314ef4088b867c113de5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PowerBarPrefab: {fileID: 4041133038111899167, guid: 28e124031d6fe3b46a6fcd64695c48de, type: 3}
+  FillObject: {fileID: 0}
   RightChild: {fileID: 7933422962614148768}
   LeftChild: {fileID: 7933422961958277899}
-  CeilingChild: {fileID: 7933422963259504275}
+  GroundChild: {fileID: 7933422963259504275}
   jumpSpeed: 0
   Jumpcounter: 0
   jump: 0
   jumpStart: 0
   onGround: 0
-  JumpSpeedStart: 5
+  JumpSpeedMin: 5
   JumpSpeedMax: 8
-  WaitJumpInterval: 0.5
+  WaitJumpInterval: 0.04
   JumpMultiplier: 1
   MoveSpeed: 5
 --- !u!50 &7933422962205707878
@@ -268,32 +269,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.45, y: 0.45}
-  m_EdgeRadius: 0
---- !u!61 &7933422962205707872
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7933422962205707902}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.5}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5, y: 1}
-    newSize: {x: 1.5, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.04}
   m_EdgeRadius: 0
 --- !u!1 &7933422962614148768
 GameObject:
@@ -378,7 +353,7 @@ GameObject:
   - component: {fileID: 7933422963259504272}
   - component: {fileID: 7933422963259504278}
   m_Layer: 6
-  m_Name: CeilingCheck
+  m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -411,7 +386,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.4}
+  m_Offset: {x: 0, y: -0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}

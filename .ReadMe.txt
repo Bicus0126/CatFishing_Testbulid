@@ -1,2 +1,3 @@
-要開始編輯專案 請在載入後開啟 ./Assets/Scenes/Scene
-./build/ 存放遊戲執行檔
+要開始編輯專案 請在載入後開啟 ./Assets/Scenes 中的場景
+./Build/ 存放遊戲執行檔
+ctrl(hold) + `(down) 開關系統日誌(目前僅設定選單會log)

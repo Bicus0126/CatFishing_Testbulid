@@ -88,7 +88,7 @@ public class GameProcess : MonoBehaviour
             }
             Timer.SetActive(false);
         }
-        if(Phase < BlockPhase.Count)
+        if(Phase < BlockPhase.Count-1)
         {
             MouseDrag.enabled = true;
             currentProcess = StartCoroutine(Gameprocess(++Phase));

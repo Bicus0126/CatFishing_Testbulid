@@ -342,7 +342,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1261853751}
         m_TargetAssemblyTypeName: SourceURL, Assembly-CSharp
-        m_MethodName: GameBGM
+        m_MethodName: LoseSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -608,7 +608,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1261853751}
         m_TargetAssemblyTypeName: SourceURL, Assembly-CSharp
-        m_MethodName: CatSound
+        m_MethodName: CrackSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -980,7 +980,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1261853751}
         m_TargetAssemblyTypeName: SourceURL, Assembly-CSharp
-        m_MethodName: MenuBGM
+        m_MethodName: WinSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3009,6 +3009,7 @@ RectTransform:
   - {fileID: 774432133}
   - {fileID: 1954329277}
   - {fileID: 1261853750}
+  - {fileID: 1675543372}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3416,6 +3417,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: 52333089a741e05479b2a10127aab3e1, type: 2}
   resolutionDropdown: {fileID: 1037183829}
+  FullscreenTgl: {fileID: 1882426391}
+  VolumeControl: {fileID: 1219873457}
+  Debugger: {fileID: 1675543371}
 --- !u!1 &862900823
 GameObject:
   m_ObjectHideFlags: 0
@@ -3754,8 +3758,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: start
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 107f7ecb04a234e448b4f32e7ca3485b, type: 2}
-  m_sharedMaterial: {fileID: 2011097800436095574, guid: 107f7ecb04a234e448b4f32e7ca3485b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 485b0f632ef73b548b039fc012304b26, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 485b0f632ef73b548b039fc012304b26, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5922,7 +5926,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -7096,8 +7100,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 100%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 107f7ecb04a234e448b4f32e7ca3485b, type: 2}
-  m_sharedMaterial: {fileID: 2011097800436095574, guid: 107f7ecb04a234e448b4f32e7ca3485b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 00ab4fe8c1e5a0348bd959c67e18e427, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 00ab4fe8c1e5a0348bd959c67e18e427, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7121,10 +7125,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.05
-  m_fontSizeBase: 18
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -7940,6 +7944,98 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1661572593}
   m_CullTransparentMesh: 1
+--- !u!1 &1675543371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1675543372}
+  - component: {fileID: 1675543374}
+  - component: {fileID: 1675543373}
+  - component: {fileID: 1675543375}
+  m_Layer: 5
+  m_Name: DebugLogger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1675543372
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675543371}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 671795184}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -200.00002, y: 0}
+  m_SizeDelta: {x: 400, y: 450}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1675543373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675543371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 10
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Debug Log...
+--- !u!222 &1675543374
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675543371}
+  m_CullTransparentMesh: 1
+--- !u!114 &1675543375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675543371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 123dc852db76ab344b2512006f63209c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1744791356
 GameObject:
   m_ObjectHideFlags: 0
@@ -8013,8 +8109,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 100%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 107f7ecb04a234e448b4f32e7ca3485b, type: 2}
-  m_sharedMaterial: {fileID: 2011097800436095574, guid: 107f7ecb04a234e448b4f32e7ca3485b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 00ab4fe8c1e5a0348bd959c67e18e427, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 00ab4fe8c1e5a0348bd959c67e18e427, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8038,10 +8134,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.05
-  m_fontSizeBase: 18
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -8824,19 +8920,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1920834139}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1261853751}
-        m_TargetAssemblyTypeName: SourceURL, Assembly-CSharp
-        m_MethodName: Smoke
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1920834139
 MonoBehaviour:
   m_ObjectHideFlags: 0

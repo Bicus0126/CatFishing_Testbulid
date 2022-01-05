@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
+    GameObject Canvas;
+    GameObject PowerBar;
+    Slider PBar;
+    [ReadOnlyInspecter] public GameObject FillObject;
+    Image FillImage;
+    
     public GameObject RightChild;
     public GameObject LeftChild;
-    public GameObject CeilingChild;
+    public GameObject GroundChild;
     TriggerCheck RightTrigger;
     TriggerCheck LeftTrigger;
-    TriggerCheck CeilingTrigger;
+    TriggerCheck GroundTrigger;
     bool RightCheckEmpty;
     bool LeftCheckEmpty;
-    bool CeilingCheckEmpty;
 
     private Rigidbody2D thisRigidbody2D;
     private Animator thisAnimator;
@@ -20,13 +26,13 @@ public class PlayerControl : MonoBehaviour
 
     
     [ReadOnlyInspecter] public float jumpSpeed = 0f;
-    [ReadOnlyInspecter] public int Jumpcounter = 0;
+    [ReadOnlyInspecter] public float Jumpcounter = 0;
     [ReadOnlyInspecter] public bool jump = false;
     [ReadOnlyInspecter] public bool jumpStart = false;
     [ReadOnlyInspecter] public bool onGround = false;
-    public float JumpSpeedStart = 1f;
+    public float JumpSpeedMin = 1f;
     public float JumpSpeedMax = 5f;
-    public float WaitJumpInterval = 0.5f;
+    public float WaitJumpInterval = 0.04f;
     public float JumpMultiplier = 1f;
     public float MoveSpeed = 10f;
     float horizontalMove = 0f;
@@ -34,13 +40,21 @@ public class PlayerControl : MonoBehaviour
     private Vector2 moveDir = Vector2.zero;
     void Start()
     {
+        Canvas = GameObject.Find("Canvas");
+        PowerBar = Canvas.transform.Find("PowerBar").gameObject;
+        PowerBar.transform.SetParent(Canvas.transform);
+        PowerBar.SetActive(false);
+        PBar = PowerBar.GetComponent<Slider>();
+        FillObject = PBar.transform.Find("Fill Area").GetChild(0).gameObject;
+        FillImage = FillObject.GetComponent<Image>();
+
         thisRigidbody2D = GetComponent<Rigidbody2D>();
         thisAnimator = GetComponent<Animator>();
         thisSpriteRenderer = GetComponent<SpriteRenderer>();
 
         RightTrigger = RightChild.GetComponent<TriggerCheck>();
         LeftTrigger = LeftChild.GetComponent<TriggerCheck>();
-        CeilingTrigger = CeilingChild.GetComponent<TriggerCheck>();
+        GroundTrigger = GroundChild.GetComponent<TriggerCheck>();
         StartCoroutine(JumpCounter());
     }
 
@@ -49,7 +63,7 @@ public class PlayerControl : MonoBehaviour
     {
         RightCheckEmpty = RightTrigger.checkEmpty;
         LeftCheckEmpty = LeftTrigger.checkEmpty;
-        CeilingCheckEmpty = CeilingTrigger.checkEmpty;
+        onGround = !GroundTrigger.checkEmpty;
 
         horizontalDir = Input.GetAxisRaw("Horizontal");     //Left = -1, Right = 1
         horizontalMove = 0f;
@@ -87,8 +101,8 @@ public class PlayerControl : MonoBehaviour
 
         if (jumpStart && onGround)
         {
-            jumpSpeed = JumpSpeedStart + Jumpcounter * JumpMultiplier;
-            jumpSpeed = (jumpSpeed > JumpSpeedMax)? JumpSpeedMax : jumpSpeed;
+            jumpSpeed = JumpSpeedMin + Jumpcounter * JumpMultiplier;
+            // jumpSpeed = (jumpSpeed > JumpSpeedMax)? JumpSpeedMax : jumpSpeed;
             moveDir.y = jumpSpeed;
             jump = false;
             jumpStart = false;
@@ -99,33 +113,39 @@ public class PlayerControl : MonoBehaviour
         thisRigidbody2D.velocity = moveDir;
     }
 
-    void OnTriggerStay2D(Collider2D other)
-    {
-        Debug.Log("Cat on " + other.gameObject.name);
-        onGround = true;
-    }
-
-    void OnTriggerExit2D()
-    {
-        onGround = false;
-        jump = false;
-    }
-
     IEnumerator JumpCounter()
     {
         WaitForSeconds JumpWait = new WaitForSeconds(WaitJumpInterval);
         Jumpcounter = 0;
+        Color newColor = Color.green;
         while(true)
         {
-            Debug.Log("JumpCounting...");
             if (jump)
             {
-                Jumpcounter++;
+                PowerBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + (Vector3.up*0.2f));
+                PowerBar.SetActive(true);
                 yield return JumpWait;
+
+                if (Jumpcounter <= (JumpSpeedMax-JumpSpeedMin))
+                {
+                    Debug.Log("JumpCounting..." + Jumpcounter);
+                    Jumpcounter += 0.1f;
+                    PBar.value = Jumpcounter / (JumpSpeedMax-JumpSpeedMin);
+
+                    if (PBar.value <= 0.5f) //change color yellow to red
+                        newColor.r = PBar.value * 2;
+                    else
+                        newColor.g = 1 - ((PBar.value - 0.5f) * 2);
+                    FillImage.color = newColor;
+                }
             }
             else
             {
                 Jumpcounter = 0;
+                PowerBar.SetActive(false);
+                PBar.value = 0f;
+                newColor = Color.green;
+                FillImage.color = Color.green;
                 yield return new WaitUntil(() => jump);
             }
         }
